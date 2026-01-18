@@ -72,7 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgm = document.getElementById('bgm');
     const musicInfo = document.getElementById('music-info');
     const guideText = document.getElementById('interaction-guide');
-    
     const bgImg = document.querySelector('.bg-img');
 
     const modal = document.getElementById('modal-overlay');
@@ -115,6 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if(bgImg) {
             gsap.to(bgImg, { duration: 5, opacity: 1, delay: 3 });
         }
+        if(objectsLayer) {
+            gsap.to(objectsLayer, { duration: 5, opacity: 1, delay: 3 });
+        }
 
         if(bgm) { 
             bgm.volume = 0.5; 
@@ -130,7 +132,11 @@ document.addEventListener('DOMContentLoaded', () => {
             duration: 1.5, opacity: 0,
             onComplete: () => { video.style.display = 'none'; }
         });
-        gsap.to(objectsLayer, { duration: 2, opacity: 1, delay: 0.5 });
+        
+        if(objectsLayer) {
+            objectsLayer.style.pointerEvents = 'auto';
+        }
+
         gsap.to(musicInfo, { duration: 3, opacity: 1, delay: 1 });
 
         if (guideText) {

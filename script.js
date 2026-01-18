@@ -5,7 +5,22 @@ function setScreenHeight() {
 
 function updateLayout() {
     setScreenHeight();
-    setTimeout(function() { window.scrollTo(0, 1); }, 0);
+
+    if (isMobileDevice()) {
+        const originalMinHeight = document.body.style.minHeight;
+        document.body.style.minHeight = '102vh'; 
+
+        setTimeout(function() {
+            window.scrollTo(0, 1); 
+            
+            setTimeout(() => {
+                document.body.style.minHeight = originalMinHeight;
+                setScreenHeight(); 
+            }, 200);
+        }, 50);
+    } else {
+        setTimeout(function() { window.scrollTo(0, 1); }, 0);
+    }
 
     var currentWidth = window.innerWidth;
     var orient = currentWidth == 320 ? "profile" : "landscape";
@@ -23,7 +38,7 @@ function isInFullscreen() {
 function openFullscreen() {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
+        elem.requestFullscreen().catch(() => {}); 
     } else if (elem.webkitRequestFullscreen) {
         elem.webkitRequestFullscreen();
     } else if (elem.msRequestFullscreen) {
@@ -34,16 +49,19 @@ function openFullscreen() {
 document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
         updateLayout();
-        setTimeout(scrollTo, 0, 0, 1);
     }
 });
 
 window.addEventListener('resize', setScreenHeight);
 window.addEventListener('load', function() {
     updateLayout();
-    setTimeout(scrollTo, 0, 0, 1);
 }, false);
-setInterval(updateLayout, 1000);
+
+setInterval(() => {
+    if(isMobileDevice() && !isInFullscreen()) {
+        setScreenHeight(); 
+    }
+}, 1000);
 
 document.addEventListener('DOMContentLoaded', () => {
     setScreenHeight();
@@ -64,18 +82,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let gameStarted = false;
 
-    document.addEventListener('click', (e) => {
-        if (gameStarted && isMobileDevice() && !isInFullscreen()) {
-            openFullscreen();
+    const tryRestoreFullscreen = (e) => {
+        if (gameStarted && isMobileDevice()) {
+            if (!isInFullscreen()) {
+                openFullscreen();
+            }
             updateLayout();
         }
-    });
+    };
 
+    document.addEventListener('click', tryRestoreFullscreen);
     document.addEventListener('touchstart', (e) => {
-        if (gameStarted && isMobileDevice() && !isInFullscreen()) {
-            openFullscreen();
-            updateLayout();
-        }
+        tryRestoreFullscreen(e);
     }, { passive: true });
 
 
@@ -117,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    musicInfo.addEventListener('click', () => {
+    musicInfo.addEventListener('click', (e) => {
         if (bgm.paused) {
             bgm.play();
             musicInfo.innerHTML = `♪ ${songTitle}`;

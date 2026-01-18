@@ -1,4 +1,30 @@
+function setScreenHeight() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+function updateLayout() {
+    setScreenHeight();
+    
+    setTimeout(function() {
+        window.scrollTo(0, 1);
+    }, 0);
+
+    var currentWidth = window.innerWidth;
+    var orient = currentWidth == 320 ? "profile" : "landscape"; 
+    document.body.setAttribute("orient", orient);
+}
+
+window.addEventListener('resize', setScreenHeight);
+window.addEventListener('load', function() {
+    updateLayout();
+    setTimeout(scrollTo, 0, 0, 1); 
+}, false);
+setInterval(updateLayout, 1000); 
+
 document.addEventListener('DOMContentLoaded', () => {
+    setScreenHeight();
+
     const enterScreen = document.getElementById('enter-screen');
     const gameContainer = document.getElementById('game-container');
     const video = document.getElementById('intro-video');
@@ -16,16 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const elem = document.documentElement;
         if (elem.requestFullscreen) {
             elem.requestFullscreen().catch(err => console.log(err));
-        } else if (elem.webkitRequestFullscreen) { /* Safari & Chrome */
+        } else if (elem.webkitRequestFullscreen) {
             elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) { /* IE11 */
+        } else if (elem.msRequestFullscreen) {
             elem.msRequestFullscreen();
         }
     }
 
     enterScreen.addEventListener('click', () => {
         openFullscreen();
-
+        updateLayout();
+        
         gsap.to(enterScreen, {
             duration: 0.5, opacity: 0,
             onComplete: () => { enterScreen.style.display = 'none'; }
@@ -270,7 +297,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="profile-section" id="secret-section">
                         <span class="profile-label" style="color:#e74c3c; margin-bottom:10px;">🔒 비밀 정보</span>
                         
-                        <!-- 암호 잠금 화면 UI -->
                         <div id="secret-lock-container">
                             <p class="lock-msg">이 정보는 잠겨있습니다.<br>키워드를 입력하여 열람하세요.</p>
                             <div class="lock-input-box">
@@ -281,7 +307,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             <p id="lock-error" class="error-msg"></p>
                         </div>
 
-                        <!-- 실제 콘텐츠 (처음에는 숨김 상태) -->
                         <div id="secret-real-content" style="display:none; flex-direction:column; gap:8px;">
                             <div class="secret-block revealed">성격 유형: ISFP-T / 4w3 / 혼돈 악.</div>
                             <div class="secret-block revealed">성격 키워드: 예술적 허무주의 / 유리멘탈 / 이상주의 / 사색적 / 감정기복 / 집요한 / 신경질적 / 회피형 애착 / 애정결핍 / 충동적 자기파괴.</div>

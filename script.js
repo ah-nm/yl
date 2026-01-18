@@ -12,13 +12,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const songTitle = "no one is coming to save you - far";
 
+    function openFullscreen() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => console.log(err));
+        } else if (elem.webkitRequestFullscreen) { /* Safari & Chrome */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+
     enterScreen.addEventListener('click', () => {
+        openFullscreen();
+
         gsap.to(enterScreen, {
             duration: 0.5, opacity: 0,
             onComplete: () => { enterScreen.style.display = 'none'; }
         });
         gameContainer.style.display = 'block';
-        if(bgm) { bgm.volume = 0.5; bgm.play().catch(e => console.log("BGM Error", e)); }
+        
+        if(bgm) { 
+            bgm.volume = 0.5; 
+            bgm.play().catch(e => console.log("BGM Error", e)); 
+        }
+        
         video.currentTime = 0; video.muted = false;
         video.play().catch(e => console.log("Video Error", e));
     });
@@ -195,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 content = renderUnifiedModal("🎨", "갤러리", gridHtml);
             } 
             else if (id === 'note') {
-                // [MODIFIED] 비밀 정보 섹션 - 암호화 처리 + 힌트 추가
                 content = renderUnifiedModal("📒", "프로필", `
                     <div class="profile-img-container">
                         <img src="pf.png" alt="남지아 프로필" class="profile-img">
@@ -347,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             showModal(content);
 
-            // [MODIFIED] 암호 확인 로직 (모달이 렌더링된 후 실행)
             if (id === 'note') {
                 const unlockBtn = document.getElementById('secret-unlock-btn');
                 const inputField = document.getElementById('secret-input');
@@ -358,20 +374,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (unlockBtn) {
                     const checkCode = () => {
                         const val = inputField.value.trim().toLowerCase();
-                        // 암호 목록: 대소문자 구분 없이 처리하기 위해 소문자로 변환하여 비교
                         const answers = ['카드뮴 옐로', '카드뮴 옐로우', 'cadmium yellow'];
                         
                         if (answers.includes(val)) {
-                            // 암호 일치 시 UI 전환
                             lockContainer.style.display = 'none';
                             realContent.style.display = 'flex';
                             
-                            // 잠금 해제 효과 (gsap 사용 가능 시)
                             if(typeof gsap !== 'undefined') {
                                 gsap.fromTo(realContent, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.5});
                             }
                         } else {
-                            // 암호 불일치
                             errorMsg.textContent = "⛔ 잘못된 암호입니다.";
                             if(typeof gsap !== 'undefined') {
                                 gsap.fromTo(errorMsg, {x:-5}, {x:5, duration:0.1, yoyo:true, repeat:3});

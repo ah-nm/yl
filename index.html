@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>일랑일랑</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="portrait-warning">
+        <div class="msg-box">
+            <p>이 페이지는 <b>가로 화면</b>에 최적화되어 있습니다.</p>
+            <div class="icon-rotate">⟳</div>
+        </div>
+    </div>
+
+    <div id="enter-screen">
+        <div class="enter-content">
+            <p class="sound-notice">🎧 음악이 재생됩니다</p>
+            <p class="click-guide">화면을 터치해주세요</p>
+        </div>
+    </div>
+
+    <main id="game-container" style="display:none;">
+        
+        <div id="music-info">♪ no one is coming to save you - far</div>
+
+        <video id="intro-video" playsinline>
+            <source src="intro.mp4" type="video/mp4">
+        </video>
+
+        <div id="objects-layer" style="opacity: 0;">
+            <div class="obj" id="obj-phone" data-id="phone"><img src="object_phone.png"></div>
+            <div class="obj" id="obj-note" data-id="note"><img src="object_note.png"></div>
+            <div class="obj" id="obj-pill" data-id="pill"><img src="object_pill.png"></div>
+            <div class="obj" id="obj-poster" data-id="poster"><img src="object_poster.png"></div>
+            <div class="obj" id="obj-painting" data-id="painting"><img src="object_painting.png"></div>
+        </div>
+
+        <img src="background.png" class="bg-img" alt="작업실 배경">
+
+        <div id="modal-overlay" class="hidden">
+            <div class="modal-content">
+                <button class="close-btn">×</button>
+                <div id="modal-inner-wrapper">
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <audio id="bgm" src="no_one_is_coming_to_save_you.mp3" loop></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

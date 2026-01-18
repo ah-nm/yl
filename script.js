@@ -5,22 +5,45 @@ function setScreenHeight() {
 
 function updateLayout() {
     setScreenHeight();
-    
-    setTimeout(function() {
-        window.scrollTo(0, 1);
-    }, 0);
+    setTimeout(function() { window.scrollTo(0, 1); }, 0);
 
     var currentWidth = window.innerWidth;
-    var orient = currentWidth == 320 ? "profile" : "landscape"; 
+    var orient = currentWidth == 320 ? "profile" : "landscape";
     document.body.setAttribute("orient", orient);
 }
+
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+function isInFullscreen() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+}
+
+function openFullscreen() {
+    const elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+    } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+    }
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        updateLayout();
+        setTimeout(scrollTo, 0, 0, 1);
+    }
+});
 
 window.addEventListener('resize', setScreenHeight);
 window.addEventListener('load', function() {
     updateLayout();
-    setTimeout(scrollTo, 0, 0, 1); 
+    setTimeout(scrollTo, 0, 0, 1);
 }, false);
-setInterval(updateLayout, 1000); 
+setInterval(updateLayout, 1000);
 
 document.addEventListener('DOMContentLoaded', () => {
     setScreenHeight();
@@ -31,28 +54,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const objectsLayer = document.getElementById('objects-layer');
     const bgm = document.getElementById('bgm');
     const musicInfo = document.getElementById('music-info');
+    const guideText = document.getElementById('interaction-guide');
     
     const modal = document.getElementById('modal-overlay');
     const modalWrapper = document.getElementById('modal-inner-wrapper');
     const closeBtn = document.querySelector('.close-btn');
 
     const songTitle = "no one is coming to save you - far";
+    
+    let gameStarted = false;
 
-    function openFullscreen() {
-        const elem = document.documentElement;
-        if (elem.requestFullscreen) {
-            elem.requestFullscreen().catch(err => console.log(err));
-        } else if (elem.webkitRequestFullscreen) {
-            elem.webkitRequestFullscreen();
-        } else if (elem.msRequestFullscreen) {
-            elem.msRequestFullscreen();
+    document.addEventListener('click', (e) => {
+        if (gameStarted && isMobileDevice() && !isInFullscreen()) {
+            openFullscreen();
+            updateLayout();
         }
-    }
+    });
+
+    document.addEventListener('touchstart', (e) => {
+        if (gameStarted && isMobileDevice() && !isInFullscreen()) {
+            openFullscreen();
+            updateLayout();
+        }
+    }, { passive: true });
+
 
     enterScreen.addEventListener('click', () => {
-        openFullscreen();
-        updateLayout();
-        
+        gameStarted = true;
+
+        if (isMobileDevice()) {
+            openFullscreen();
+            updateLayout();
+        }
+
         gsap.to(enterScreen, {
             duration: 0.5, opacity: 0,
             onComplete: () => { enterScreen.style.display = 'none'; }
@@ -75,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         gsap.to(objectsLayer, { duration: 2, opacity: 1, delay: 0.5 });
         gsap.to(musicInfo, { duration: 3, opacity: 1, delay: 1 });
+
+        if (guideText) {
+            const tl = gsap.timeline({ delay: 1.5 });
+            tl.to(guideText, { duration: 1, opacity: 1 })
+              .to(guideText, { duration: 1, opacity: 0, delay: 2.5 });
+        }
     });
 
     musicInfo.addEventListener('click', () => {

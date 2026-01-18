@@ -12,10 +12,9 @@ function updateLayout() {
 
         setTimeout(function() {
             window.scrollTo(0, 1); 
-            
             setTimeout(() => {
                 document.body.style.minHeight = originalMinHeight;
-                setScreenHeight(); 
+                setScreenHeight();
             }, 200);
         }, 50);
     } else {
@@ -74,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicInfo = document.getElementById('music-info');
     const guideText = document.getElementById('interaction-guide');
     
+    const bgImg = document.querySelector('.bg-img');
+
     const modal = document.getElementById('modal-overlay');
     const modalWrapper = document.getElementById('modal-inner-wrapper');
     const closeBtn = document.querySelector('.close-btn');
@@ -111,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         gameContainer.style.display = 'block';
         
+        if(bgImg) {
+            gsap.to(bgImg, { duration: 5, opacity: 1, delay: 3 });
+        }
+
         if(bgm) { 
             bgm.volume = 0.5; 
             bgm.play().catch(e => console.log("BGM Error", e)); 

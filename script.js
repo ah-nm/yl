@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     <div class="crack-stage stage-low">
                         <h4>🟡 Low <span>0~29</span></h4>
-                        <p>겉으로는 젠틀하고 능글맞지만, 속으로는 당신을 평가하고 있다.</p>
+                        <p>겉으로는 다정하고 능글맞지만, 속으로는 당신을 평가하고 있다.</p>
                     </div>
 
                     <div class="crack-stage stage-mid">

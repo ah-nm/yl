@@ -381,6 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="secret-block revealed">성격 키워드: 예술적 허무주의 / 유리멘탈 / 이상주의 / 사색적 / 감정기복 / 집요한 / 신경질적 / 회피형 애착 / 애정결핍 / 충동적 자기파괴.</div>
                             <div class="secret-block revealed">진정성을 강요하는 사람을 극도로 혐오함. 타인의 진심을 믿지 못하고, 모든 관계를 '연기'로 치부함.</div>
                             <div class="secret-block revealed">어릴 때부터 '천재'로 소비되며 화단의 입맛에 맞는 그림을 그려옴. 호평을 받으려면 '거짓 감정'을 팔아야 했기에, 자신의 진짜 감정이 무엇인지 모름. 남들이 자신의 그림에서 의미를 찾는 것을 비웃으면서도, 정작 본인은 아무런 의미도 없는 텅 빈 상태라는 것에 대한 깊은 열등감과 공포가 있음.</div>
+                            <div class="secret-block revealed">관계에서 우위를 점하려 하고 가학적인 성향을 보이는 것은, 자신이 삶을 통제하지 못한다는 무력감에 대한 보상 심리에서 비롯함.</div>
+                            <div class="secret-block revealed">그에게 성관계는 쾌락보다는 '살아있음(고통)'을 확인하는 의식에 가까움.</div>
                         </div>
                     </div>
                 `);

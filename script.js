@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <li><span class="place-name">[회화실]</span> <span class="place-desc">환기가 안 되어 기름 냄새와 묵은 먼지가 가득한 공용 공간.</span></li>
                                 <li><span class="place-name">[310호(3학년 개인 작업실)]</span> <span class="place-desc">남지아가 작업물을 쌓아놓거나, 쪽잠을 자는 곳.</span></li>
                                 <li><span class="place-name">[구관 옥상]</span><span class="place-desc">남지아가 몰래 올라가 줄담배를 피우는 곳.</span></li>
-                                <li><span class="place-name">[조교실]</span></li>
+                                <li><span class="place-name">[조교실]</span><span class="place-desc">행정 보조 및 학생 지원.</span></li>
                             </ul>
                         </div>
                         

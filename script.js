@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (unlockBtn) {
                     const checkCode = () => {
                         const val = inputField.value.trim().toLowerCase();
-                        const answers = ['카드뮴 옐로', '카드뮴 옐로우', 'cadmium yellow'];
+                        const answers = ['카드뮴 옐로', '카드뮴 옐로우', '카드뮴옐로', '카드뮴옐로우', '캐드미움 옐로', '캐드미움 옐로우', '캐드미움옐로', '캐드미움옐로우', 'cadmium yellow'];
                         
                         if (answers.includes(val)) {
                             lockContainer.style.display = 'none';

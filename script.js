@@ -545,3 +545,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('lightbox').style.display = 'none';
     };
 });
+
+console.log("%c훔쳐보는 취미가 있나 봐?", "color: #f1c40f; font-size: 20px; font-family: 'Times New Roman'; font-weight: bold;");
+console.log("%c내 속을 다 안다고 착각하지 마. 역겨우니까.", "color: #ccc; font-size: 12px;");

@@ -118,6 +118,30 @@ body[orient="landscape"] { min-height: 400px; }
     text-align: center;
 }
 
+#skip-btn {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    z-index: 60;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: sans-serif;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 15px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    opacity: 0;
+}
+#skip-btn:hover {
+    background: rgba(241, 196, 15, 0.2);
+    border-color: #f1c40f;
+    color: #f1c40f;
+}
+
 #game-container {
     position: relative;
     width: 100%;
@@ -298,9 +322,7 @@ body[orient="landscape"] { min-height: 400px; }
     text-align: justify;
     color: #ccc;
 }
-.pr-body p {
-    margin-bottom: 15px;
-}
+.pr-body p { margin-bottom: 15px; }
 .burnt-text {
     margin-top: 30px;
     text-align: center;
@@ -318,15 +340,9 @@ body[orient="landscape"] { min-height: 400px; }
     padding-left: 10px;
     margin: 20px 0 10px 0;
 }
-.system-section-title:first-child {
-    margin-top: 0;
-}
+.system-section-title:first-child { margin-top: 0; }
 
-.command-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+.command-list { display: flex; flex-direction: column; gap: 8px; }
 .command-item {
     display: flex;
     align-items: center;
@@ -346,10 +362,7 @@ body[orient="landscape"] { min-height: 400px; }
     min-width: 60px;
     text-align: center;
 }
-.cmd-desc {
-    font-size: 0.9rem;
-    color: #ccc;
-}
+.cmd-desc { font-size: 0.9rem; color: #ccc; }
 
 .profile-section { margin-bottom: 25px; }
 .profile-label {
@@ -451,9 +464,7 @@ body[orient="landscape"] { min-height: 400px; }
     font-size: 0.9rem;
     transition: background 0.2s;
 }
-#secret-unlock-btn:hover {
-    background: #f1c40f;
-}
+#secret-unlock-btn:hover { background: #f1c40f; }
 .error-msg {
     color: #e74c3c;
     font-size: 0.8rem;
@@ -494,21 +505,35 @@ body[orient="landscape"] { min-height: 400px; }
 .stage-broken h4 { color: #888;}
 
 .npc-list { display: flex; flex-direction: column; gap: 12px; }
+
 .npc-item {
     display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    padding: 15px;
+    flex-direction: column;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
     cursor: pointer;
+    overflow: hidden;
 }
+
 .npc-item:hover {
     background: rgba(255, 255, 255, 0.07);
     border-color: rgba(241, 196, 15, 0.3);
 }
+.npc-item.active {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #f1c40f;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.npc-main-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+}
+
 .npc-img-box {
     width: 60px; height: 60px;
     flex-shrink: 0;
@@ -516,8 +541,15 @@ body[orient="landscape"] { min-height: 400px; }
     overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background: #000;
+    transition: transform 0.2s;
+    cursor: zoom-in;
+}
+.npc-img-box:hover {
+    transform: scale(1.05);
+    border-color: #f1c40f;
 }
 .npc-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
 .npc-info { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
 .npc-header-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .npc-name { font-size: 1.1rem; font-weight: 700; color: #fff; margin: 0; }
@@ -538,6 +570,42 @@ body[orient="landscape"] { min-height: 400px; }
     margin: 0;
     line-height: 1.45;
     word-break: keep-all;
+}
+
+.npc-dialogue-wrapper {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.npc-item.active .npc-dialogue-wrapper {
+    max-height: 300px;
+}
+
+.npc-dialogue-box {
+    position: relative;
+    background: #222;
+    border: 1px solid #f1c40f;
+    border-radius: 12px;
+    padding: 18px;
+    margin: 10px 15px 20px 15px;
+    color: #eee;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.npc-dialogue-box::after {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 42px;
+    width: 14px; 
+    height: 14px;
+    background: #222;
+    border-top: 1px solid #f1c40f;
+    border-left: 1px solid #f1c40f;
+    transform: rotate(45deg);
+    z-index: 1;
 }
 
 .gallery-grid {

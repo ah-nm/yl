@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const musicInfo = document.getElementById('music-info');
     const guideText = document.getElementById('interaction-guide');
     const bgImg = document.querySelector('.bg-img');
+    const skipBtn = document.getElementById('skip-btn');
 
     const modal = document.getElementById('modal-overlay');
     const modalWrapper = document.getElementById('modal-inner-wrapper');
@@ -96,38 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
         tryRestoreFullscreen(e);
     }, { passive: true });
 
-
-    enterScreen.addEventListener('click', () => {
-        gameStarted = true;
-
-        if (isMobileDevice()) {
-            openFullscreen();
-            updateLayout();
-        }
-
-        gsap.to(enterScreen, {
-            duration: 0.5, opacity: 0,
-            onComplete: () => { enterScreen.style.display = 'none'; }
-        });
-        gameContainer.style.display = 'block';
+    const finishIntro = () => {
+        video.pause();
         
-        if(bgImg) {
-            gsap.to(bgImg, { duration: 5, opacity: 1, delay: 3 });
-        }
-        if(objectsLayer) {
-            gsap.to(objectsLayer, { duration: 5, opacity: 1, delay: 3 });
+        if (skipBtn) {
+             gsap.to(skipBtn, { duration: 0.3, opacity: 0, onComplete: () => { skipBtn.style.display = 'none'; } });
         }
 
-        if(bgm) { 
-            bgm.volume = 0.5; 
-            bgm.play().catch(e => console.log("BGM Error", e)); 
-        }
-        
-        video.currentTime = 0; video.muted = false;
-        video.play().catch(e => console.log("Video Error", e));
-    });
-
-    video.addEventListener('ended', () => {
         gsap.to(video, {
             duration: 1.5, opacity: 0,
             onComplete: () => { video.style.display = 'none'; }
@@ -144,7 +120,52 @@ document.addEventListener('DOMContentLoaded', () => {
             tl.to(guideText, { duration: 1, opacity: 1 })
               .to(guideText, { duration: 1, opacity: 0, delay: 2.5 });
         }
+    };
+
+
+    enterScreen.addEventListener('click', () => {
+        gameStarted = true;
+
+        if (isMobileDevice()) {
+            openFullscreen();
+            updateLayout();
+        }
+
+        gsap.to(enterScreen, {
+            duration: 0.5, opacity: 0,
+            onComplete: () => { enterScreen.style.display = 'none'; }
+        });
+        gameContainer.style.display = 'block';
+        
+        if (skipBtn) {
+            skipBtn.style.display = 'block';
+            gsap.to(skipBtn, { duration: 0.5, opacity: 1, delay: 0.5 });
+        }
+
+        if(bgImg) {
+            gsap.to(bgImg, { duration: 5, opacity: 1, delay: 3 });
+        }
+        if(objectsLayer) {
+            gsap.to(objectsLayer, { duration: 5, opacity: 1, delay: 3 });
+        }
+
+        if(bgm) { 
+            bgm.volume = 0.5; 
+            bgm.play().catch(e => console.log("BGM Error", e)); 
+        }
+        
+        video.currentTime = 0; video.muted = false;
+        video.play().catch(e => console.log("Video Error", e));
     });
+
+    video.addEventListener('ended', finishIntro);
+    
+    if (skipBtn) {
+        skipBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            finishIntro();
+        });
+    }
 
     musicInfo.addEventListener('click', (e) => {
         if (bgm.paused) {
@@ -180,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 role: "시각디자인과 2학년",
                 img: "ysr_pf.png",
                 desc: "남지아의 전 fwb. 애증과 미련이 얽힌 관계.",
+                dialogue: "하지 마. 그냥, 엮이지 마."
             },
             {
                 name: "박태범",
@@ -187,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 role: "조소과 3학년",
                 img: "ptb_pf.png",
                 desc: "고교 동창. 부유하고 냉소적이며 건조한 우정.",
+                dialogue: "걔? 그냥 관종이야. 금수저 도련님. 지가 망가지고 싶어서 안달 난 척하는데, 진짜 밑바닥 구경도 못 해본 놈이 흉내만 내는 게 좀 웃기지 않냐? 옆에서 보면 코미디가 따로 없어."
             },
             {
                 name: "손석훈",
@@ -194,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 role: "회화과 정교수",
                 img: "ssh_pf.png",
                 desc: "권위와 가식의 상징. 남지아 모친의 지인.",
+                dialogue: "지아 군? 아주 훌륭한 학생이지. 교수가 뭘 원하는지 정확히 파악해서 결과물을 가져오거든. 가끔 너무 영악하게 느껴질 때도 있지만. 뭐, 그것도 재능이라면 재능이겠지. 갤러리 물려받으려면 그 정도 처세는 있어야 하지 않겠어?"
             },
             {
                 name: "민한결",
@@ -201,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 role: "유리조형과 4학년",
                 img: "mhg_pf.png",
                 desc: "4차원. 남지아가 열등감을 느끼는 존재.",
+                dialogue: "...숨 막힐 거 같은데. 그렇게 살면."
             },
             {
                 name: "김 조교",
@@ -208,23 +233,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 role: "학과 사무실 조교",
                 img: "kzg_pf.png",
                 desc: "피곤에 찌든 행정가. 원칙주의자.",
+                dialogue: "행정실 입장에서는 요주의 인물입니다. 멀쩡한 캔버스 찢어발기고 유리 깨트려서 작업실을 난장판으로 만들어 놓거든요. 치우는 사람 생각은 안 하고... 아, 피곤해."
             }
         ];
 
         let html = `<div class="npc-list">`;
-        npcs.forEach(npc => {
+        npcs.forEach((npc, index) => {
             html += `
-                <div class="npc-item" onclick="openLightbox('${npc.img}')">
-                    <div class="npc-img-box">
-                        <img src="${npc.img}" alt="${npc.name}">
-                    </div>
-                    <div class="npc-info">
-                        <div class="npc-header-row">
-                            <h3 class="npc-name">${npc.name}</h3>
-                            <span class="npc-age">${npc.age}</span>
+                <div class="npc-item" onclick="toggleDialogue(this)">
+                    <div class="npc-main-content">
+                        <div class="npc-img-box" onclick="event.stopPropagation(); openLightbox('${npc.img}')">
+                            <img src="${npc.img}" alt="${npc.name}">
                         </div>
-                        <span class="npc-role-tag">${npc.role}</span>
-                        <p class="npc-desc">${npc.desc}</p>
+                        <div class="npc-info">
+                            <div class="npc-header-row">
+                                <h3 class="npc-name">${npc.name}</h3>
+                                <span class="npc-age">${npc.age}</span>
+                            </div>
+                            <span class="npc-role-tag">${npc.role}</span>
+                            <p class="npc-desc">${npc.desc}</p>
+                        </div>
+                    </div>
+                    <div class="npc-dialogue-wrapper">
+                        <div class="npc-dialogue-box">
+                            ${npc.dialogue}
+                        </div>
                     </div>
                 </div>
             `;
@@ -237,6 +270,16 @@ document.addEventListener('DOMContentLoaded', () => {
                  </div>`;
                  
         return html;
+    };
+    
+    window.toggleDialogue = function(element) {
+        const isActive = element.classList.contains('active');
+        
+        if (!isActive) {
+            element.classList.add('active');
+        } else {
+            element.classList.remove('active');
+        }
     };
 
 
@@ -283,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 content = renderUnifiedModal("👥", "인물 및 환경", `
                     <h3 class="system-section-title">주변 인물</h3>
+                    <p style="color:#888; font-size:0.85rem; margin-bottom:10px;">* 인물 카드를 누르면 대사를 확인할 수 있습니다.</p>
                     ${npcHtml}
                     <div class="divider"></div>
                     <h3 class="system-section-title">주요 장소 (H대학교)</h3>
@@ -449,6 +493,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="command-item">
                             <div class="cmd-tag">!폰</div>
                             <div class="cmd-desc">남지아의 핸드폰 확인. (스포티파이 / 카카오톡 / 인스타 / 유튜브 / 메모장)</div>
+                        </div>
+                        <div class="command-item">
+                            <div class="cmd-tag">!스킵</div>
+                            <div class="cmd-desc">!스킵+기간 만큽 장면 스킵. (남지아의 휴지통 확인)</div>
                         </div>
                         <div class="command-item">
                             <div class="cmd-tag">!핫픽스</div>
